@@ -8,3 +8,5 @@ if __name__ == '__main__':
     print(aluno2.id)
     print(aluno1.nome_completo())
     print(aluno2.nome_completo())
+    print(len(aluno1.nome_completo()))
+    print(len(aluno2.nome_completo()))
