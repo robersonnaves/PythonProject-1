@@ -1,7 +1,9 @@
-from datetime import datetime
+from flask import Flask, jsonify
 
-from aluno_class import Aluno
-from prova_class import Prova
+from aluno_class import Aluno, AlunoSchema
+from prova_class import Prova, ProvaSchema
+
+app = Flask(__name__)
 
 try:
     provaAluno1 = Prova("Matemática", 10.0)
@@ -19,19 +21,17 @@ aluno4 = Aluno("Ana", "da Souza", 23, "ana@d.com.br", provaAluno4)
 
 list_alunos = [aluno1, aluno2, aluno3, aluno4]
 
-if __name__ == '__main__':
-    for obj in list_alunos:
-        print("Id: {}".format(obj.id))
-        print("Nome: {}".format(obj.nome))
-        print("Sobrenome: {}".format(obj.sobrenome))
-        print("Idade: {} anos".format(obj.idade))
-        print("Email: {}".format(obj.email))
-        print("Nome completo {}".format(obj.nome_completo().upper()))
-        print("Prova de {}".format(obj.prova.materia))
-        print("Nota: {} / Resultado: {}".format(obj.prova.nota, obj.prova.resultado()))
-        print("=====================================")
+prova_schema = ProvaSchema()
+aluno_schema = AlunoSchema()
 
-        print("Data: {}".format(datetime.strftime(datetime.now(), "%d/%m/%Y %H:%M:%S")))
-        print("Dia: {}".format(datetime.strftime(datetime.now(), "%d")))
-        print("Mês: {}".format(datetime.strftime(datetime.now(), "%m")))
-        print("Ano: {}".format(datetime.strftime(datetime.now(), "%Y")))
+
+@app.route('/alunos', methods=['GET'])
+def get_alunos():
+    result = aluno_schema.dump(list_alunos, many=True)
+    response = jsonify(result)
+    response.headers.add('Content-Type', 'application/json; charset=utf-8')
+    return response
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

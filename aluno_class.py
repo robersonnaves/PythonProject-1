@@ -1,5 +1,16 @@
 import uuid
 
+from marshmallow import Schema, fields
+
+
+class AlunoSchema(Schema):
+    id = fields.UUID()
+    nome = fields.Str()
+    sobrenome = fields.Str()
+    idade = fields.Int()
+    email = fields.Email()
+    prova = fields.Nested('ProvaSchema', many=False)
+
 
 class Aluno:
     def __init__(self, nome, sobrenome, idade, email, prova):

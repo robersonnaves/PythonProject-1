@@ -1,11 +1,20 @@
 import uuid
 
+from marshmallow import Schema, fields
+
+
+class ProvaSchema(Schema):
+    id = fields.UUID()
+    materia = fields.Str()
+    nota = fields.Float()
+
 
 class Prova:
     def __init__(self, materia, nota):
         self.id = uuid.uuid4()
         self._materia = str(materia)
         self._nota = self._validate_nota(nota)
+        self.resultado = self.resultado()
 
     @property
     def materia(self):
