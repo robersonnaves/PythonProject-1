@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 
 from aluno_class import Aluno, AlunoSchema
 from prova_class import Prova, ProvaSchema
@@ -33,5 +33,38 @@ def get_alunos():
     return response
 
 
+@app.route('/alunos/<uuid:_id>', methods=['GET'])
+def get_aluno(_id):
+    for _aluno in list_alunos:
+        if _aluno.id == _id:
+            result = aluno_schema.dump(_aluno)
+            response = jsonify(result)
+            response.headers.add('Content-Type', 'application/json; charset=utf-8')
+            return response
+    return jsonify({"message": "Aluno não encontrado."}), 404
+
+
+@app.route('/alunos/<uuid:_id>', methods=['DELETE'])
+def delete_aluno(_id):
+    for _aluno in list_alunos:
+        if _aluno.id == _id:
+            list_alunos.remove(_aluno)
+            return jsonify({"message": "Aluno removido com sucesso."}), 200
+    return jsonify({"message": "Aluno não encontrado."}), 404
+
+
+@app.route('/alunos/', methods=['POST'])
+def post_aluno():
+    data = request.json
+    if 'nome' not in data or 'prova' not in data:
+        return jsonify({'message': 'Dados incompletos'}), 400
+    novo_aluno = Aluno(data['nome'], data['sobrenome'], data['idade'], data['email'], data['prova'])
+    list_alunos.append(novo_aluno)
+    result = aluno_schema.dump(novo_aluno)
+    return jsonify({"message": "Aluno criado com sucesso.", 'aluno': result}), 201
+
+
 if __name__ == '__main__':
+    for aluno in list_alunos:
+        print(aluno.id)
     app.run(debug=True)
