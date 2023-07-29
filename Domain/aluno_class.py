@@ -2,7 +2,7 @@ import uuid
 
 from marshmallow import Schema, fields
 
-from prova_class import ProvaSchema
+from Domain.prova_class import ProvaSchema
 
 
 class AlunoSchema(Schema):

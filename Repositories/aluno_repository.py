@@ -1,5 +1,5 @@
-from aluno_class import Aluno
-from prova_class import Prova
+from Domain.aluno_class import Aluno
+from Domain.prova_class import Prova
 
 
 class AlunoRepository:
@@ -28,3 +28,9 @@ class AlunoRepository:
             if aluno.id == _id:
                 return aluno
         return None
+
+    def add_aluno(self, aluno):
+        self.list_alunos.append(aluno)
+        for aluno in self.list_alunos:
+            print(aluno.nome)
+        return aluno
