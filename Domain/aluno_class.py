@@ -1,17 +1,21 @@
 import uuid
 
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, post_load
 
 from Domain.prova_class import ProvaSchema
 
 
 class AlunoSchema(Schema):
-    id = fields.UUID(required=True)
-    nome = fields.Str()
-    sobrenome = fields.Str()
-    idade = fields.Int()
-    email = fields.Email()
-    prova = fields.Nested(ProvaSchema(), many=False)
+    _id = fields.Str(required=True)
+    nome = fields.Str(required=True)
+    sobrenome = fields.Str(required=True)
+    idade = fields.Int(required=True)
+    email = fields.Email(required=True)
+    prova = fields.Nested(ProvaSchema(), required=True, many=False)
+
+    @post_load
+    def make_aluno(self, data, **kwargs):
+        return Aluno(**data)
 
 
 class Aluno:

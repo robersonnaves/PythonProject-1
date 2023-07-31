@@ -26,12 +26,12 @@ class AlunoController(Resource):
     def post(self):
         try:
             data = request.get_json()
-            if not data or "nome" not in data or "idade" not in data or "email" not in data:
+            if not data:
                 return {"message": "Dados de aluno invalidos"}, 400
             else:
-                aluno = self.aluno_schema.load(data)
-                aluno = self.aluno_repository.add_aluno(aluno)
-                result = self.aluno_schema.dump(aluno)
+                aluno_new = self.aluno_schema.load(data)
+                aluno_added = self.aluno_repository.add_aluno(aluno_new)
+                result = self.aluno_schema.dump(aluno_added)
                 response = jsonify(result)
                 response.headers.add('Content-Type', 'application/json; charset=utf-8')
                 return response
